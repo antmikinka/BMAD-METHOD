@@ -1,0 +1,132 @@
+workflow:
+  name: {{WORKFLOW_NAME}}
+  description: {{WORKFLOW_DESCRIPTION}}
+  
+  phases:
+    - {{PHASE_1_NAME}}
+    - {{PHASE_2_NAME}}
+    - {{PHASE_3_NAME}}
+    - {{PHASE_4_NAME}}
+    - {{PHASE_5_NAME}}
+    - {{PHASE_6_NAME}}
+  
+  agents_involved:
+    - {{AGENT_1_ID}}
+    - {{AGENT_2_ID}}
+    - {{AGENT_3_ID}}
+    - {{AGENT_4_ID}}
+    - {{AGENT_5_ID}}
+  
+  decision_points:
+    - {{DECISION_POINT_1}}
+    - {{DECISION_POINT_2}}
+    - {{DECISION_POINT_3}}
+    - {{DECISION_POINT_4}}
+
+steps:
+  {{STEP_1_ID}}:
+    responsible_agent: {{AGENT_1_ID}}
+    inputs:
+      - {{INPUT_1}}
+      - {{INPUT_2}}
+      - {{INPUT_3}}
+      - {{INPUT_4}}
+    tasks:
+      - {{TASK_1}}
+      - {{TASK_2}}
+      - {{TASK_3}}
+    outputs:
+      - {{OUTPUT_1}}
+      - {{OUTPUT_2}}
+      - {{OUTPUT_3}}
+    quality_gate:
+      criteria: {{QUALITY_GATE_1}}
+      checklist: {{CHECKLIST_1}}
+      approval_required: {{APPROVAL_REQUIRED_1}}
+  
+  {{STEP_2_ID}}:
+    responsible_agent: {{AGENT_2_ID}}
+    inputs:
+      - {{OUTPUT_1}}
+      - {{INPUT_5}}
+      - {{INPUT_6}}
+    tasks:
+      - {{TASK_4}}
+      - {{TASK_5}}
+      - {{TASK_6}}
+    outputs:
+      - {{OUTPUT_4}}
+      - {{OUTPUT_5}}
+      - {{OUTPUT_6}}
+    quality_gate:
+      criteria: {{QUALITY_GATE_2}}
+      checklist: {{CHECKLIST_2}}
+      approval_required: {{APPROVAL_REQUIRED_2}}
+  
+  {{STEP_3_ID}}:
+    responsible_agent: {{AGENT_3_ID}}
+    inputs:
+      - {{OUTPUT_4}}
+      - {{INPUT_7}}
+      - {{INPUT_8}}
+    tasks:
+      - {{TASK_7}}
+      - {{TASK_8}}
+      - {{TASK_9}}
+    outputs:
+      - {{OUTPUT_7}}
+      - {{OUTPUT_8}}
+      - {{OUTPUT_9}}
+    quality_gate:
+      criteria: {{QUALITY_GATE_3}}
+      checklist: {{CHECKLIST_3}}
+      approval_required: {{APPROVAL_REQUIRED_3}}
+
+quality_gates:
+  {{QUALITY_GATE_1}}:
+    criteria:
+      - {{CRITERIA_1}}: {{STANDARD_1}}
+      - {{CRITERIA_2}}: {{STANDARD_2}}
+      - {{CRITERIA_3}}: {{STANDARD_3}}
+      - {{CRITERIA_4}}: {{STANDARD_4}}
+    required_approvals:
+      - {{APPROVER_1}}
+      - {{APPROVER_2}}
+      - {{APPROVER_3}}
+  
+  {{QUALITY_GATE_2}}:
+    criteria:
+      - {{CRITERIA_5}}: {{STANDARD_5}}
+      - {{CRITERIA_6}}: {{STANDARD_6}}
+      - {{CRITERIA_7}}: {{STANDARD_7}}
+      - {{CRITERIA_8}}: {{STANDARD_8}}
+    required_approvals:
+      - {{APPROVER_4}}
+      - {{APPROVER_5}}
+      - {{APPROVER_6}}
+
+error_handling:
+  {{ERROR_TYPE_1}}:
+    actions:
+      - {{ERROR_ACTION_1}}
+      - {{ERROR_ACTION_2}}
+      - {{ERROR_ACTION_3}}
+      - {{ERROR_ACTION_4}}
+  
+  {{ERROR_TYPE_2}}:
+    actions:
+      - {{ERROR_ACTION_5}}
+      - {{ERROR_ACTION_6}}
+      - {{ERROR_ACTION_7}}
+      - {{ERROR_ACTION_8}}
+
+success_metrics:
+  efficiency:
+    - {{EFFICIENCY_METRIC_1}}: {{TARGET_1}}
+    - {{EFFICIENCY_METRIC_2}}: {{TARGET_2}}
+    - {{EFFICIENCY_METRIC_3}}: {{TARGET_3}}
+  
+  quality:
+    - {{QUALITY_METRIC_1}}: {{TARGET_4}}
+    - {{QUALITY_METRIC_2}}: {{TARGET_5}}
+    - {{QUALITY_METRIC_3}}: {{TARGET_6}}
