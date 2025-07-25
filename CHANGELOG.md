@@ -1,3 +1,100 @@
+# [4.31.0](https://github.com/bmadcode/BMAD-METHOD/compare/v4.30.4...v4.31.0) (2025-07-20)
+
+
+### Bug Fixes
+
+* enhanced user guide with better diagrams ([c445962](https://github.com/bmadcode/BMAD-METHOD/commit/c445962f259cd7d84c47a896e7fda99e83a30c8d))
+
+
+### Features
+
+* Installation includes a getting started user guide with detailed mermaid diagram ([df57d77](https://github.com/bmadcode/BMAD-METHOD/commit/df57d772cac9f9010811e7e86a6433a0fe636a45))
+
+## [4.30.4](https://github.com/bmadcode/BMAD-METHOD/compare/v4.30.3...v4.30.4) (2025-07-19)
+
+
+### Bug Fixes
+
+* docs ([8619006](https://github.com/bmadcode/BMAD-METHOD/commit/8619006c16731b99fa36b434d209a0c2caf2d998))
+* lint fix ([49e4897](https://github.com/bmadcode/BMAD-METHOD/commit/49e489701e55feac481806740ea54bebef042fba))
+
+## [4.30.3](https://github.com/bmadcode/BMAD-METHOD/compare/v4.30.2...v4.30.3) (2025-07-19)
+
+
+### Bug Fixes
+
+* improve code in the installer to be more memory efficient ([849e428](https://github.com/bmadcode/BMAD-METHOD/commit/849e42871ab845098fd196217bce83e43c736b8a))
+
+## [4.30.2](https://github.com/bmadcode/BMAD-METHOD/compare/v4.30.1...v4.30.2) (2025-07-17)
+
+
+### Bug Fixes
+
+* remove z2 ([dcb36a9](https://github.com/bmadcode/BMAD-METHOD/commit/dcb36a9b44b6644f6b2723c9067abaa9b0bc1999))
+
+## [4.30.1](https://github.com/bmadcode/BMAD-METHOD/compare/v4.30.0...v4.30.1) (2025-07-15)
+
+
+### Bug Fixes
+
+* added logo to installer, because why not... ([2cea37a](https://github.com/bmadcode/BMAD-METHOD/commit/2cea37aa8c1924ddf5aa476f4c312837f2615a70))
+
+# [4.30.0](https://github.com/bmadcode/BMAD-METHOD/compare/v4.29.7...v4.30.0) (2025-07-15)
+
+
+### Features
+
+* installer is now VERY clear about IDE selection being a multiselect ([e24b6f8](https://github.com/bmadcode/BMAD-METHOD/commit/e24b6f84fd9e4ff4b99263019b5021ca2b145b2f))
+
+## [4.29.7](https://github.com/bmadcode/BMAD-METHOD/compare/v4.29.6...v4.29.7) (2025-07-14)
+
+
+### Bug Fixes
+
+* bundle build ([0723eed](https://github.com/bmadcode/BMAD-METHOD/commit/0723eed88140e76146dfbfdddd49afe86e8522ee))
+
+## [4.29.6](https://github.com/bmadcode/BMAD-METHOD/compare/v4.29.5...v4.29.6) (2025-07-14)
+
+
+### Bug Fixes
+
+* improve agent task folowing in agressing cost saving ide model combos ([3621c33](https://github.com/bmadcode/BMAD-METHOD/commit/3621c330e65f328e7326f93a5fe27e65b08907e7))
+
+## [4.29.5](https://github.com/bmadcode/BMAD-METHOD/compare/v4.29.4...v4.29.5) (2025-07-14)
+
+
+### Bug Fixes
+
+* windows regex issue ([9f48c1a](https://github.com/bmadcode/BMAD-METHOD/commit/9f48c1a869a9cc54fb5e7d899c2af7a5cef70e10))
+
+## [4.29.4](https://github.com/bmadcode/BMAD-METHOD/compare/v4.29.3...v4.29.4) (2025-07-14)
+
+
+### Bug Fixes
+
+* empty .roomodes, support Windows-style newlines in YAML block regex ([#311](https://github.com/bmadcode/BMAD-METHOD/issues/311)) ([551e30b](https://github.com/bmadcode/BMAD-METHOD/commit/551e30b65e1f04386f0bd0193f726828df684d5b))
+
+## [4.29.3](https://github.com/bmadcode/BMAD-METHOD/compare/v4.29.2...v4.29.3) (2025-07-13)
+
+
+### Bug Fixes
+
+* annoying YAML lint error ([afea271](https://github.com/bmadcode/BMAD-METHOD/commit/afea271e5e3b14a0da497e241b6521ba5a80b85b))
+
+## [4.29.2](https://github.com/bmadcode/BMAD-METHOD/compare/v4.29.1...v4.29.2) (2025-07-13)
+
+
+### Bug Fixes
+
+* add readme note about discord joining issues ([4ceaced](https://github.com/bmadcode/BMAD-METHOD/commit/4ceacedd7370ea80181db0d66cf8da8dcbfdd109))
+
+## [4.29.1](https://github.com/bmadcode/BMAD-METHOD/compare/v4.29.0...v4.29.1) (2025-07-13)
+
+
+### Bug Fixes
+
+* brianstorming facilitation output ([f62c05a](https://github.com/bmadcode/BMAD-METHOD/commit/f62c05ab0f54e6c26c67cd9ac11200b172d11076))
+
 # [4.29.0](https://github.com/bmadcode/BMAD-METHOD/compare/v4.28.0...v4.29.0) (2025-07-13)
 
 
