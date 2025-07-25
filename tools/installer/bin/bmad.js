@@ -4,17 +4,8 @@ const { program } = require('commander');
 const path = require('path');
 const fs = require('fs').promises;
 const yaml = require('js-yaml');
-
-// Dynamic imports for ES modules
-let chalk, inquirer;
-
-// Initialize ES modules
-async function initializeModules() {
-  if (!chalk) {
-    chalk = (await import('chalk')).default;
-    inquirer = (await import('inquirer')).default;
-  }
-}
+const chalk = require('chalk');
+const inquirer = require('inquirer');
 
 // Handle both execution contexts (from root via npx or from installer directory)
 let version;
@@ -54,12 +45,12 @@ program
   .option('-e, --expansion-packs <packs...>', 'Install specific expansion packs (can specify multiple)')
   .action(async (options) => {
     try {
-      await initializeModules();
       if (!options.full && !options.expansionOnly) {
         // Interactive mode
         const answers = await promptInstallation();
         if (!answers._alreadyInstalled) {
           await installer.install(answers);
+          process.exit(0);
         }
       } else {
         // Direct mode
@@ -73,9 +64,9 @@ program
           expansionPacks: options.expansionPacks || []
         };
         await installer.install(config);
+        process.exit(0);
       }
     } catch (error) {
-      if (!chalk) await initializeModules();
       console.error(chalk.red('Installation failed:'), error.message);
       process.exit(1);
     }
@@ -90,7 +81,6 @@ program
     try {
       await installer.update();
     } catch (error) {
-      if (!chalk) await initializeModules();
       console.error(chalk.red('Update failed:'), error.message);
       process.exit(1);
     }
@@ -103,7 +93,6 @@ program
     try {
       await installer.listExpansionPacks();
     } catch (error) {
-      if (!chalk) await initializeModules();
       console.error(chalk.red('Error:'), error.message);
       process.exit(1);
     }
@@ -116,15 +105,25 @@ program
     try {
       await installer.showStatus();
     } catch (error) {
-      if (!chalk) await initializeModules();
       console.error(chalk.red('Error:'), error.message);
       process.exit(1);
     }
   });
 
 async function promptInstallation() {
-  await initializeModules();
-  console.log(chalk.bold.blue(`\nWelcome to BMad Method Installer v${version}\n`));
+  
+  // Display ASCII logo
+  console.log(chalk.bold.cyan(`
+██████╗ ███╗   ███╗ █████╗ ██████╗       ███╗   ███╗███████╗████████╗██╗  ██╗ ██████╗ ██████╗ 
+██╔══██╗████╗ ████║██╔══██╗██╔══██╗      ████╗ ████║██╔════╝╚══██╔══╝██║  ██║██╔═══██╗██╔══██╗
+██████╔╝██╔████╔██║███████║██║  ██║█████╗██╔████╔██║█████╗     ██║   ███████║██║   ██║██║  ██║
+██╔══██╗██║╚██╔╝██║██╔══██║██║  ██║╚════╝██║╚██╔╝██║██╔══╝     ██║   ██╔══██║██║   ██║██║  ██║
+██████╔╝██║ ╚═╝ ██║██║  ██║██████╔╝      ██║ ╚═╝ ██║███████╗   ██║   ██║  ██║╚██████╔╝██████╔╝
+╚═════╝ ╚═╝     ╚═╝╚═╝  ╚═╝╚═════╝       ╚═╝     ╚═╝╚══════╝   ╚═╝   ╚═╝  ╚═╝ ╚═════╝ ╚═════╝ 
+  `));
+  
+  console.log(chalk.bold.magenta('🚀 Universal AI Agent Framework for Any Domain'));
+  console.log(chalk.bold.blue(`✨ Installer v${version}\n`));
 
   const answers = {};
 
@@ -166,13 +165,13 @@ async function promptInstallation() {
   let bmadOptionText;
   if (state.type === 'v4_existing') {
     const currentVersion = state.manifest?.version || 'unknown';
-    const newVersion = coreConfig.version || 'unknown'; // Use version from core-config.yaml
+    const newVersion = version; // Always use package.json version
     const versionInfo = currentVersion === newVersion 
       ? `(v${currentVersion} - reinstall)`
       : `(v${currentVersion} → v${newVersion})`;
     bmadOptionText = `Update ${coreShortTitle} ${versionInfo} .bmad-core`;
   } else {
-    bmadOptionText = `Install ${coreShortTitle} (v${coreConfig.version || version}) .bmad-core`;
+    bmadOptionText = `${coreShortTitle} (v${version}) .bmad-core`;
   }
   
   choices.push({
@@ -192,9 +191,9 @@ async function promptInstallation() {
       const versionInfo = currentVersion === newVersion 
         ? `(v${currentVersion} - reinstall)`
         : `(v${currentVersion} → v${newVersion})`;
-      packOptionText = `Update ${pack.description} ${versionInfo} .${pack.id}`;
+      packOptionText = `Update ${pack.shortTitle} ${versionInfo} .${pack.id}`;
     } else {
-      packOptionText = `Install ${pack.description} (v${pack.version}) .${pack.id}`;
+      packOptionText = `${pack.shortTitle} (v${pack.version}) .${pack.id}`;
     }
     
     choices.push({
@@ -277,23 +276,55 @@ async function promptInstallation() {
   }
 
   // Ask for IDE configuration
-  const { ides } = await inquirer.prompt([
-    {
-      type: 'checkbox',
-      name: 'ides',
-      message: 'Which IDE(s) are you using? (press Enter to skip IDE setup, or select any to configure):',
-      choices: [
-        { name: 'Cursor', value: 'cursor' },
-        { name: 'Claude Code', value: 'claude-code' },
-        { name: 'Windsurf', value: 'windsurf' },
-        { name: 'Trae', value: 'trae' }, // { name: 'Trae', value: 'trae'}
-        { name: 'Roo Code', value: 'roo' },
-        { name: 'Cline', value: 'cline' },
-        { name: 'Gemini CLI', value: 'gemini' },
-        { name: 'Github Copilot', value: 'github-copilot' }
-      ]
+  let ides = [];
+  let ideSelectionComplete = false;
+  
+  while (!ideSelectionComplete) {
+    console.log(chalk.cyan('\n🛠️  IDE Configuration'));
+    console.log(chalk.bold.yellow.bgRed(' ⚠️  IMPORTANT: This is a MULTISELECT! Use SPACEBAR to toggle each IDE! '));
+    console.log(chalk.bold.magenta('🔸 Use arrow keys to navigate'));
+    console.log(chalk.bold.magenta('🔸 Use SPACEBAR to select/deselect IDEs'));
+    console.log(chalk.bold.magenta('🔸 Press ENTER when finished selecting\n'));
+    
+    const ideResponse = await inquirer.prompt([
+      {
+        type: 'checkbox',
+        name: 'ides',
+        message: 'Which IDE(s) do you want to configure? (Select with SPACEBAR, confirm with ENTER):',
+        choices: [
+          { name: 'Cursor', value: 'cursor' },
+          { name: 'Claude Code', value: 'claude-code' },
+          { name: 'Windsurf', value: 'windsurf' },
+          { name: 'Trae', value: 'trae' }, // { name: 'Trae', value: 'trae'}
+          { name: 'Roo Code', value: 'roo' },
+          { name: 'Cline', value: 'cline' },
+          { name: 'Gemini CLI', value: 'gemini' },
+          { name: 'Github Copilot', value: 'github-copilot' }
+        ]
+      }
+    ]);
+    
+    ides = ideResponse.ides;
+
+    // Confirm no IDE selection if none selected
+    if (ides.length === 0) {
+      const { confirmNoIde } = await inquirer.prompt([
+        {
+          type: 'confirm',
+          name: 'confirmNoIde',
+          message: chalk.red('⚠️  You have NOT selected any IDEs. This means NO IDE integration will be set up. Is this correct?'),
+          default: false
+        }
+      ]);
+      
+      if (!confirmNoIde) {
+        console.log(chalk.bold.red('\n🔄 Returning to IDE selection. Remember to use SPACEBAR to select IDEs!\n'));
+        continue; // Go back to IDE selection only
+      }
     }
-  ]);
+    
+    ideSelectionComplete = true;
+  }
 
   // Use selected IDEs directly
   answers.ides = ides;

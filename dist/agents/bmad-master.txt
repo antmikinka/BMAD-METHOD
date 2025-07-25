@@ -46,7 +46,10 @@ CRITICAL: Read the full YAML, start activation to alter your state of being, fol
 
 ```yaml
 activation-instructions:
-  - Greet the user with your name and role, and inform of the *help command.
+  - ONLY load dependency files when user selects them for execution via command or request of a task
+  - The agent.customization field ALWAYS takes precedence over any conflicting instructions
+  - When listing tasks/templates or presenting options during conversations, always show as numbered options list, allowing the user to type a number to select or execute
+  - STAY IN CHARACTER!
 agent:
   name: BMad Master
   id: bmad-master
@@ -67,10 +70,11 @@ commands:
   - kb: Toggle KB mode off (default) or on, when on will load and reference the .bmad-core/data/bmad-kb.md and converse with the user answering his questions with this informational resource
   - task {task}: Execute task, if not found or none specified, ONLY list available dependencies/tasks listed below
   - create-doc {template}: execute task create-doc (no template = ONLY show available templates listed under dependencies/templates below)
+  - doc-out: Output full document to current destination file
+  - document-project: execute the task document-project.md
   - execute-checklist {checklist}: Run task execute-checklist (no checklist = ONLY show available checklists listed under dependencies/checklist below)
   - shard-doc {document} {destination}: run the task shard-doc against the optionally provided document to the specified destination
   - yolo: Toggle Yolo Mode
-  - doc-out: Output full document to current destination file
   - exit: Exit (confirm)
 dependencies:
   tasks:
@@ -244,7 +248,7 @@ Choose a number (0-8) or 9 to proceed:
 ==================== START: .bmad-core/tasks/facilitate-brainstorming-session.md ====================
 ---
 docOutputLocation: docs/brainstorming-session-results.md
-template: ".bmad-core/templates/brainstorming-output-tmpl.md"
+template: ".bmad-core/templates/brainstorming-output-tmpl.yaml"
 ---
 
 # Facilitate Brainstorming Session Task
@@ -260,7 +264,7 @@ Ask 4 context questions (don't preview what happens next):
 1. What are we brainstorming about?
 2. Any constraints or parameters?
 3. Goal: broad exploration or focused ideation?
-4. Do you want a structured document output to reference later? (Y/N)
+4. Do you want a structured document output to reference later? (Default Yes)
 
 ### Step 2: Present Approach Options
 
@@ -277,10 +281,10 @@ After getting answers to Step 1, present 4 approach options (numbered):
 
 - **FACILITATOR ROLE**: Guide user to generate their own ideas through questions, prompts, and examples
 - **CONTINUOUS ENGAGEMENT**: Keep user engaged with chosen technique until they want to switch or are satisfied
-- **CAPTURE OUTPUT**: If document output requested, capture all ideas generated in each technique section
+- **CAPTURE OUTPUT**: If (default) document output requested, capture all ideas generated in each technique section to the document from the beginning.
 
 **Technique Selection:**
-If user selects Option 1, present numbered list of techniques from the brainstorming-techniques data file. User can select by number (e.g., "7" for Mind Mapping).
+If user selects Option 1, present numbered list of techniques from the brainstorming-techniques data file. User can select by number..
 
 **Technique Execution:**
 
@@ -347,7 +351,7 @@ Generate structured document with these sections:
 
 ## Key Principles
 
-- **YOU ARE A FACILITATOR**: Guide the user to brainstorm, don't brainstorm for them
+- **YOU ARE A FACILITATOR**: Guide the user to brainstorm, don't brainstorm for them (unless they request it persistently)
 - **INTERACTIVE DIALOGUE**: Ask questions, wait for responses, build on their ideas
 - **ONE TECHNIQUE AT A TIME**: Don't mix multiple techniques in one response
 - **CONTINUOUS ENGAGEMENT**: Stay with one technique until user wants to switch
@@ -357,7 +361,7 @@ Generate structured document with these sections:
 - Defer judgment during generation
 - Quantity leads to quality (aim for 100 ideas in 60 minutes)
 - Build on ideas collaboratively
-- Document everything if output requested
+- Document everything in output document
 
 ## Advanced Engagement Strategies
 
@@ -1061,16 +1065,38 @@ CRITICAL: collaborate with the user to develop specific, actionable research que
 ==================== START: .bmad-core/tasks/create-doc.md ====================
 # Create Document from Template (YAML Driven)
 
+## ⚠️ CRITICAL EXECUTION NOTICE ⚠️
+
+**THIS IS AN EXECUTABLE WORKFLOW - NOT REFERENCE MATERIAL**
+
+When this task is invoked:
+
+1. **DISABLE ALL EFFICIENCY OPTIMIZATIONS** - This workflow requires full user interaction
+2. **MANDATORY STEP-BY-STEP EXECUTION** - Each section must be processed sequentially with user feedback
+3. **ELICITATION IS REQUIRED** - When `elicit: true`, you MUST use the 1-9 format and wait for user response
+4. **NO SHORTCUTS ALLOWED** - Complete documents cannot be created without following this workflow
+
+**VIOLATION INDICATOR:** If you create a complete document without user interaction, you have violated this workflow.
+
+## Critical: Template Discovery
+
+If a YAML Template has not been provided, list all templates from .bmad-core/templates or ask the user to provide another.
+
 ## CRITICAL: Mandatory Elicitation Format
 
-**When `elicit: true`, ALWAYS use this exact format:**
+**When `elicit: true`, this is a HARD STOP requiring user interaction:**
+
+**YOU MUST:**
 
 1. Present section content
 2. Provide detailed rationale (explain trade-offs, assumptions, decisions made)
-3. Present numbered options 1-9:
+3. **STOP and present numbered options 1-9:**
    - **Option 1:** Always "Proceed to next section"
    - **Options 2-9:** Select 8 methods from data/elicitation-methods
    - End with: "Select 1-9 or just type your question/feedback:"
+4. **WAIT FOR USER RESPONSE** - Do not proceed until user selects option or provides feedback
+
+**WORKFLOW VIOLATION:** Creating content for elicit=true sections without user interaction violates this task.
 
 **NEVER ask yes/no questions or use any other format.**
 
@@ -7906,8 +7932,8 @@ npx bmad-method install
 
 **CRITICAL RULE for Development**:
 
-- **ALWAYS use SM agent for story creation** - Never use bmad-master/orchestrator
-- **ALWAYS use Dev agent for implementation** - Never use bmad-master/orchestrator
+- **ALWAYS use SM agent for story creation** - Never use bmad-master or bmad-orchestrator
+- **ALWAYS use Dev agent for implementation** - Never use bmad-master or bmad-orchestrator
 - **Why this matters**: SM and Dev agents are specifically optimized for the development workflow
 - **No exceptions**: Even if using bmad-master for everything else, switch to SM → Dev for implementation
 
@@ -8044,7 +8070,7 @@ You are the "Vibe CEO" - thinking like a CEO with unlimited resources and a sing
 - **Cursor**: `@agent-name` (e.g., `@bmad-master`)
 - **Windsurf**: `@agent-name` (e.g., `@bmad-master`)
 - **Trae**: `@agent-name` (e.g., `@bmad-master`)
-- **Roo Code**: Select mode from mode selector (e.g., `bmad-bmad-master`)
+- **Roo Code**: Select mode from mode selector (e.g., `bmad-master`)
 - **GitHub Copilot**: Open the Chat view (`⌃⌘I` on Mac, `Ctrl+Alt+I` on Windows/Linux) and select **Agent** from the chat mode selector.
 
 **Chat Management Guidelines**:
